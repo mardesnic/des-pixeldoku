@@ -5,6 +5,7 @@ import type { Picture } from './pictures';
 import {
   clueOf,
   cluesOf,
+  groupsDone,
   isSolved,
   lineDone,
   paint,
@@ -39,6 +40,29 @@ describe('clues', () => {
     expect(lineDone(coloured, [0, 1, 2], [1, 1])).toBe(true);
     expect(lineDone(coloured, [0, 1, 2], [2])).toBe(false);
     expect(lineDone([false, false], [0, 1], [])).toBe(true);
+  });
+});
+
+describe('numbers on their own', () => {
+  const line = (s: string) => [...s].map((c) => c === '#');
+
+  it('light up when their group can only be where it is', () => {
+    // The bottom square of a "2 1" column can only be the 1.
+    expect(groupsDone(line('....#'), [2, 1])).toEqual([false, true]);
+    expect(groupsDone(line('##...'), [2, 1])).toEqual([true, false]);
+    expect(groupsDone(line('##.#.'), [2, 1])).toEqual([true, true]);
+  });
+
+  it('wait while a group could still be another number', () => {
+    // A single square in the middle could still grow into the 2.
+    expect(groupsDone(line('..#..'), [2, 1])).toEqual([false, false]);
+    // Two 1s: either could be either until both are there.
+    expect(groupsDone(line('#....'), [1, 1])).toEqual([true, false]);
+    expect(groupsDone(line('..#..'), [1, 1])).toEqual([false, false]);
+  });
+
+  it('stay off when the line has too much coloured', () => {
+    expect(groupsDone(line('###.#'), [2, 1])).toEqual([false, false]);
   });
 });
 

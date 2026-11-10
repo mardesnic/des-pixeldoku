@@ -14,11 +14,10 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 
 - Four sizes, from 5 × 5 to 10 × 10, each with its own hand-drawn pictures
 - Tap a square to colour it, or drag along a row or column
-- A row's or column's numbers turn green when its squares match them
+- Each number is a little block, and turns green as soon as its group of squares is in place
 - The picture shows in its colours once it's solved, and tells you what it is
 - Every picture has exactly one answer, found without guessing
 - Next picture picks one you haven't solved yet
-- How to play, with examples, shown the first time
 - Undo and Start over
 - Picks up where you left off after a reload
 - Keeps the screen on while you play

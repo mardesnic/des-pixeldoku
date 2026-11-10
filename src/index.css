@@ -10,6 +10,7 @@
   --filled: #2b2f38;
   --clue: #e9ecf1;
   --done: #2f9e44;
+  --on-done: #ffffff;
   --paper: #eef1f5;
   --radius: 18px;
 
@@ -38,6 +39,7 @@
     --filled: #e8eaee;
     --clue: #20242b;
     --done: #69db7c;
+    --on-done: #0b2410;
   }
 }
 
@@ -206,12 +208,12 @@ h2 {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: calc(var(--unit) * 0.2);
+  padding: calc(var(--unit) * 0.1);
   border-radius: calc(var(--unit) * 0.25);
   background: var(--clue);
-  color: var(--text);
   transition:
     background 0.2s,
-    color 0.2s,
     opacity 0.4s;
 }
 
@@ -219,25 +221,35 @@ h2 {
   flex-direction: column;
 }
 
-.clue span {
+/* Each number is a little block like a group of coloured squares, with a
+   gap between them like the gap between groups. */
+.group {
   display: grid;
   place-items: center;
-  width: var(--unit);
-  height: var(--unit);
+  width: calc(var(--unit) * 0.8);
+  height: calc(var(--unit) * 0.8);
+  flex: none;
+  border-radius: 22%;
+  background: var(--filled);
+  color: var(--square);
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
-.clues--columns .clue span {
-  width: auto;
+.group--done {
+  background: var(--done);
+  color: var(--on-done);
 }
 
-.clues--rows .clue span {
-  height: auto;
+.group--none {
+  background: none;
+  color: var(--muted);
 }
 
-/* A line whose coloured squares match its numbers. */
+/* A line whose coloured squares match all its numbers. */
 .clue--done {
   background: color-mix(in srgb, var(--done) 18%, transparent);
-  color: var(--done);
 }
 
 .squares {
@@ -367,30 +379,6 @@ h2 {
   .picture {
     animation: none !important;
   }
-}
-
-/* How to play: rows drawn like the board, at a fixed size. */
-
-.help p {
-  margin: 0;
-}
-
-.example {
-  --unit: 40px;
-  --n: 5;
-  display: grid;
-  grid-template-columns: calc(2 * var(--unit)) auto;
-  gap: 8px;
-  justify-content: center;
-  font-size: calc(var(--unit) * 0.5);
-  font-weight: 700;
-}
-
-.example .squares {
-  grid-column: auto;
-  grid-row: auto;
-  width: calc(var(--n) * var(--unit));
-  height: var(--unit);
 }
 
 /* New game and settings */

@@ -55,6 +55,38 @@ export const lineDone = (
   clue: number[]
 ) => same(clueOf(cells.map((i) => coloured[i])), clue);
 
+// Which of a line's numbers have found their group: a run of coloured
+// squares just as long, that can only be that number's group however the
+// rest of the line turns out. Colouring the bottom square of a "2 1" column
+// lights up the 1 at once, so a child sees what each number stands for.
+export function groupsDone(line: boolean[], clue: number[]): boolean[] {
+  const n = line.length;
+  // Where each group starts, in every way the clue fits around the
+  // coloured squares.
+  const fits: number[][] = [];
+  const starts: number[] = [];
+  const place = (k: number, from: number) => {
+    if (k === clue.length) {
+      for (let i = from; i < n; i++) if (line[i]) return;
+      fits.push(starts.slice());
+      return;
+    }
+    for (let at = from; at + clue[k] <= n; at++) {
+      if (at > from && line[at - 1]) break;
+      if (line[at + clue[k]]) continue;
+      starts[k] = at;
+      place(k + 1, at + clue[k] + 1);
+    }
+  };
+  place(0, 0);
+  return clue.map((len, k) => {
+    const at = fits[0]?.[k];
+    if (at === undefined || fits.some((f) => f[k] !== at)) return false;
+    for (let i = at; i < at + len; i++) if (!line[i]) return false;
+    return true;
+  });
+}
+
 // Solving one line at a time, the way a person does: try every way the
 // clue's runs fit the line with what is already known, and keep the squares
 // that come out the same in all of them. Unknown is -1, empty 0, coloured 1.

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { Board } from './components/Board';
 import { Confetti } from './components/Confetti';
-import { Help } from './components/Help';
 import { Icon } from './components/Icon';
 import { NewGame, SettingsView } from './components/Menu';
 import {
@@ -23,7 +22,7 @@ import { useCheer } from './lib/use-cheer';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
-type View = 'play' | 'new' | 'settings' | 'help';
+type View = 'play' | 'new' | 'settings';
 
 export default function App() {
   // Keys are prefixed: other apps on the same GitHub Pages origin share
@@ -40,9 +39,7 @@ export default function App() {
     initialSettings
   );
   const [stats, setStats] = useStoredState<Stats>('pixels-stats', initialStats);
-  const [view, setViewState] = useState<View>(
-    game ? 'play' : settings.helpSeen ? 'new' : 'help'
-  );
+  const [view, setViewState] = useState<View>(game ? 'play' : 'new');
   // Menus open over the game, so the phone's Back button closes them.
   const setView = (next: View) => {
     if (next === 'play') popMenu();
@@ -133,24 +130,12 @@ export default function App() {
         </div>
       </header>
 
-      {view === 'help' && (
-        <Help
-          onDone={() => {
-            setSettings({ ...settings, helpSeen: true });
-            setView(game ? 'play' : 'new');
-          }}
-          t={t}
-        />
-      )}
-      {view === 'new' && (
-        <NewGame onStart={start} onHelp={() => setView('help')} t={t} />
-      )}
+      {view === 'new' && <NewGame onStart={start} t={t} />}
       {view === 'settings' && (
         <SettingsView
           settings={settings}
           setSettings={setSettings}
           stats={stats}
-          onHelp={() => setView('help')}
           t={t}
         />
       )}

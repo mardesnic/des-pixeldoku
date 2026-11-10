@@ -9,14 +9,11 @@ export type Difficulty = (typeof DIFFICULTIES)[number];
 export type Settings = {
   language: Language;
   sound: boolean;
-  // How to play shows by itself until it has been seen once.
-  helpSeen: boolean;
 };
 
 export const initialSettings: Settings = {
   language: 'auto',
   sound: true,
-  helpSeen: false,
 };
 
 export type Game = {

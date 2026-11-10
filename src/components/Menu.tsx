@@ -9,11 +9,9 @@ import { LANG_NAMES, LANGS, type Language, type Strings } from '../lib/i18n';
 
 export function NewGame({
   onStart,
-  onHelp,
   t,
 }: {
   onStart: (d: Difficulty) => void;
-  onHelp: () => void;
   t: Strings;
 }) {
   return (
@@ -31,9 +29,6 @@ export function NewGame({
           </button>
         ))}
       </div>
-      <button className='button button--secondary' onClick={onHelp}>
-        {t.howToPlay}
-      </button>
     </section>
   );
 }
@@ -68,13 +63,11 @@ export function SettingsView({
   settings,
   setSettings,
   stats,
-  onHelp,
   t,
 }: {
   settings: Settings;
   setSettings: (s: Settings) => void;
   stats: Stats;
-  onHelp: () => void;
   t: Strings;
 }) {
   const languages: Language[] = ['auto', ...LANGS];
@@ -103,10 +96,6 @@ export function SettingsView({
             onChange={(sound) => setSettings({ ...settings, sound })}
           />
         </div>
-
-        <button className='button button--secondary' onClick={onHelp}>
-          {t.howToPlay}
-        </button>
       </section>
 
       <section className='card'>

@@ -6,6 +6,7 @@ import {
   cluesOf,
   colourAt,
   columnOf,
+  groupsDone,
   lineDone,
   paint,
   rowOf,
@@ -13,6 +14,34 @@ import {
   strokeCells,
   type Axis,
 } from '../lib/pixels';
+
+// A line's numbers, each a little block like a group of coloured squares,
+// with a gap between them like the gap between groups. Each turns green
+// when its group is in place.
+function Clue({ line, clue }: { line: boolean[]; clue: number[] }) {
+  const done = groupsDone(line, clue);
+  const all = lineDone(
+    line,
+    line.map((_, i) => i),
+    clue
+  );
+  return (
+    <div className={all ? 'clue clue--done' : 'clue'}>
+      {clue.length ? (
+        clue.map((k, i) => (
+          <span
+            key={i}
+            className={done[i] || all ? 'group group--done' : 'group'}
+          >
+            {k}
+          </span>
+        ))
+      ) : (
+        <span className='group group--none'>0</span>
+      )}
+    </div>
+  );
+}
 
 type Stroke = { start: number; axis?: Axis; on: boolean; cells: number[] };
 
@@ -81,31 +110,17 @@ export function Board({
     >
       <div className='clues clues--columns' aria-hidden='true'>
         {clues.columns.map((clue, c) => (
-          <div
+          <Clue
             key={c}
-            className={
-              lineDone(shown, columnOf(n, c), clue) ? 'clue clue--done' : 'clue'
-            }
-          >
-            {(clue.length ? clue : [0]).map((k, i) => (
-              <span key={i}>{k}</span>
-            ))}
-          </div>
+            line={columnOf(n, c).map((i) => shown[i])}
+            clue={clue}
+          />
         ))}
       </div>
 
       <div className='clues clues--rows' aria-hidden='true'>
         {clues.rows.map((clue, r) => (
-          <div
-            key={r}
-            className={
-              lineDone(shown, rowOf(n, r), clue) ? 'clue clue--done' : 'clue'
-            }
-          >
-            {(clue.length ? clue : [0]).map((k, i) => (
-              <span key={i}>{k}</span>
-            ))}
-          </div>
+          <Clue key={r} line={rowOf(n, r).map((i) => shown[i])} clue={clue} />
         ))}
       </div>
 
