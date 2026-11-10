@@ -175,7 +175,6 @@ export default function App() {
             </section>
           ) : (
             <div className='bar'>
-              <p className='goal'>{t.hint}</p>
               <div className='tools'>
                 <button
                   className='tool'
