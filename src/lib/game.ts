@@ -1,6 +1,6 @@
 import type { Language } from './i18n';
 import type { Picture } from './pictures';
-import { COLOUR, EMPTY, isSolved, paint, type Mark, type Tool } from './pixels';
+import { isSolved, paint } from './pixels';
 
 // Grids of 5, 6, 8 and 10 squares a side.
 export const DIFFICULTIES = ['tiny', 'small', 'medium', 'big'] as const;
@@ -9,26 +9,28 @@ export type Difficulty = (typeof DIFFICULTIES)[number];
 export type Settings = {
   language: Language;
   sound: boolean;
+  // How to play shows by itself until it has been seen once.
+  helpSeen: boolean;
 };
 
 export const initialSettings: Settings = {
   language: 'auto',
   sound: true,
+  helpSeen: false,
 };
 
 export type Game = {
   difficulty: Difficulty;
   picture: string;
-  marks: Mark[];
-  tool: Tool;
+  // Whether each square is coloured, row by row.
+  coloured: boolean[];
   solved: boolean;
 };
 
 export const newGame = (difficulty: Difficulty, p: Picture): Game => ({
   difficulty,
   picture: p.id,
-  marks: new Array<Mark>(p.rows.length ** 2).fill(EMPTY),
-  tool: COLOUR,
+  coloured: new Array<boolean>(p.rows.length ** 2).fill(false),
   solved: false,
 });
 
@@ -37,11 +39,11 @@ export function withStroke(
   game: Game,
   p: Picture,
   cells: number[],
-  mark: Mark
+  on: boolean
 ): Game {
-  const marks = paint(game.marks, cells, mark, game.tool);
-  if (marks.every((m, i) => m === game.marks[i])) return game;
-  return { ...game, marks, solved: isSolved(p, marks) };
+  const coloured = paint(game.coloured, cells, on);
+  if (coloured.every((c, i) => c === game.coloured[i])) return game;
+  return { ...game, coloured, solved: isSolved(p, coloured) };
 }
 
 // The pictures solved at each size, by id.

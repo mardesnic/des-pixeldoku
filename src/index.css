@@ -260,16 +260,8 @@ h2 {
   transition: background 0.08s;
 }
 
-.square--1 {
+.square--on {
   background: var(--filled);
-}
-
-.square--2::after {
-  content: '';
-  position: absolute;
-  inset: 37%;
-  border-radius: 50%;
-  background: var(--muted);
 }
 
 /* Solved: the clues step back and the picture shows in its colours. */
@@ -303,50 +295,10 @@ h2 {
   gap: 10px 14px;
 }
 
-
-/* Colour or Dot: what a tap puts in a square. */
-.switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
-  border-radius: 16px;
-  background: var(--clue);
-}
-
-.switch button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 6px;
-  border: 0;
-  border-radius: 12px;
-  background: none;
-  font-weight: 700;
+.goal {
   color: var(--muted);
-}
-
-.switch button[aria-pressed='true'] {
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
-}
-
-.switch__mark {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  flex: none;
-}
-
-.switch__mark--colour {
-  background: var(--filled);
-}
-
-.switch__mark--dot {
-  background: radial-gradient(circle, var(--muted) 0 4px, var(--square) 4.5px);
-  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .tools {
@@ -415,6 +367,30 @@ h2 {
   .picture {
     animation: none !important;
   }
+}
+
+/* How to play: rows drawn like the board, at a fixed size. */
+
+.help p {
+  margin: 0;
+}
+
+.example {
+  --unit: 40px;
+  --n: 5;
+  display: grid;
+  grid-template-columns: calc(2 * var(--unit)) auto;
+  gap: 8px;
+  justify-content: center;
+  font-size: calc(var(--unit) * 0.5);
+  font-weight: 700;
+}
+
+.example .squares {
+  grid-column: auto;
+  grid-row: auto;
+  width: calc(var(--n) * var(--unit));
+  height: var(--unit);
 }
 
 /* New game and settings */

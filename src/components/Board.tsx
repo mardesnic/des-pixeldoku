@@ -3,8 +3,6 @@ import { useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { Strings } from '../lib/i18n';
 import { PALETTE, type Picture } from '../lib/pictures';
 import {
-  COLOUR,
-  DOT,
   cluesOf,
   colourAt,
   columnOf,
@@ -13,27 +11,22 @@ import {
   rowOf,
   sizeOf,
   strokeCells,
-  strokeMark,
   type Axis,
-  type Mark,
-  type Tool,
 } from '../lib/pixels';
 
-type Stroke = { start: number; axis?: Axis; mark: Mark; cells: number[] };
+type Stroke = { start: number; axis?: Axis; on: boolean; cells: number[] };
 
 export function Board({
   picture,
-  marks,
-  tool,
+  coloured,
   solved,
   onStroke,
   t,
 }: {
   picture: Picture;
-  marks: Mark[];
-  tool: Tool;
+  coloured: boolean[];
   solved: boolean;
-  onStroke: (cells: number[], mark: Mark) => void;
+  onStroke: (cells: number[], on: boolean) => void;
   t: Strings;
 }) {
   const n = sizeOf(picture);
@@ -44,7 +37,7 @@ export function Board({
   const squares = useRef<HTMLDivElement>(null);
   const [stroke, setStroke] = useState<Stroke | null>(null);
   // While a finger is down, the stroke shows before it is played.
-  const shown = stroke ? paint(marks, stroke.cells, stroke.mark, tool) : marks;
+  const shown = stroke ? paint(coloured, stroke.cells, stroke.on) : coloured;
 
   const squareAt = (x: number, y: number) => {
     const box = squares.current!.getBoundingClientRect();
@@ -58,7 +51,7 @@ export function Board({
     if (solved || stroke || !e.isPrimary) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     const start = squareAt(e.clientX, e.clientY);
-    setStroke({ start, mark: strokeMark(marks[start], tool), cells: [start] });
+    setStroke({ start, on: !coloured[start], cells: [start] });
   };
 
   const onMove = (e: React.PointerEvent) => {
@@ -71,12 +64,9 @@ export function Board({
 
   const onUp = (e: React.PointerEvent) => {
     if (!stroke || !e.isPrimary) return;
-    onStroke(stroke.cells, stroke.mark);
+    onStroke(stroke.cells, stroke.on);
     setStroke(null);
   };
-
-  const label = (m: Mark) =>
-    m === COLOUR ? t.coloured : m === DOT ? t.dotted : t.blank;
 
   return (
     <div
@@ -127,12 +117,12 @@ export function Board({
         onPointerUp={onUp}
         onPointerCancel={() => setStroke(null)}
       >
-        {shown.map((m, i) => (
+        {shown.map((on, i) => (
           <span
             key={i}
-            className={`square square--${m}`}
+            className={on ? 'square square--on' : 'square'}
             role='img'
-            aria-label={label(m)}
+            aria-label={on ? t.coloured : t.blank}
           />
         ))}
 

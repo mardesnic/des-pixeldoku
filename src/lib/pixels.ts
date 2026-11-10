@@ -1,13 +1,6 @@
 import type { Difficulty } from './game';
 import { PICTURES, type Picture } from './pictures';
 
-// What the player has put in a square.
-export const EMPTY = 0;
-export const COLOUR = 1;
-export const DOT = 2;
-export type Mark = typeof EMPTY | typeof COLOUR | typeof DOT;
-export type Tool = typeof COLOUR | typeof DOT;
-
 export const sizeOf = (p: Picture) => p.rows.length;
 
 // Whether each square of the picture is coloured, row by row.
@@ -56,8 +49,11 @@ const same = (a: number[], b: number[]) =>
   a.length === b.length && a.every((x, i) => x === b[i]);
 
 // A line is done when its coloured squares make exactly its clue.
-export const lineDone = (marks: Mark[], cells: number[], clue: number[]) =>
-  same(clueOf(cells.map((i) => marks[i] === COLOUR)), clue);
+export const lineDone = (
+  coloured: boolean[],
+  cells: number[],
+  clue: number[]
+) => same(clueOf(cells.map((i) => coloured[i])), clue);
 
 // Solving one line at a time, the way a person does: try every way the
 // clue's runs fit the line with what is already known, and keep the squares
@@ -152,31 +148,20 @@ export function strokeCells(
   return { cells, axis: line };
 }
 
-// What a stroke puts down. Starting on a square that already has the tool's
-// mark rubs that mark out; otherwise it puts the mark down.
-export const strokeMark = (startMark: Mark, tool: Tool): Mark =>
-  startMark === tool ? EMPTY : tool;
-
-// Applies a stroke. Rubbing out only takes off the tool's own mark. Putting
-// a mark down fills empty squares, and changes the first square whatever it
-// had, so a single tap can turn a dot into a coloured square.
+// Applies a stroke: a stroke that starts on an empty square colours every
+// square it goes over, and one that starts on a coloured square clears them.
 export function paint(
-  marks: Mark[],
+  coloured: boolean[],
   cells: number[],
-  mark: Mark,
-  tool: Tool
-): Mark[] {
-  const next = marks.slice();
-  cells.forEach((i, k) => {
-    if (mark === EMPTY) {
-      if (next[i] === tool) next[i] = EMPTY;
-    } else if (k === 0 || next[i] === EMPTY) next[i] = mark;
-  });
+  on: boolean
+): boolean[] {
+  const next = coloured.slice();
+  for (const i of cells) next[i] = on;
   return next;
 }
 
-export function isSolved(p: Picture, marks: Mark[]) {
-  return solutionOf(p).every((on, i) => on === (marks[i] === COLOUR));
+export function isSolved(p: Picture, coloured: boolean[]) {
+  return solutionOf(p).every((on, i) => on === coloured[i]);
 }
 
 export const pictureById = (d: Difficulty, id: string) =>

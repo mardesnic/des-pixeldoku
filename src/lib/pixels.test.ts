@@ -3,9 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { initialStats, newGame, recordWin, withStroke } from './game';
 import type { Picture } from './pictures';
 import {
-  COLOUR,
-  DOT,
-  EMPTY,
   clueOf,
   cluesOf,
   isSolved,
@@ -15,8 +12,6 @@ import {
   solve,
   solveLine,
   strokeCells,
-  strokeMark,
-  type Mark,
 } from './pixels';
 
 const picture = (rows: string[]): Picture => ({
@@ -40,10 +35,10 @@ describe('clues', () => {
   });
 
   it('say a line is done when its coloured squares match', () => {
-    const marks: Mark[] = [COLOUR, DOT, COLOUR];
-    expect(lineDone(marks, [0, 1, 2], [1, 1])).toBe(true);
-    expect(lineDone(marks, [0, 1, 2], [2])).toBe(false);
-    expect(lineDone([EMPTY, EMPTY], [0, 1], [])).toBe(true);
+    const coloured = [true, false, true];
+    expect(lineDone(coloured, [0, 1, 2], [1, 1])).toBe(true);
+    expect(lineDone(coloured, [0, 1, 2], [2])).toBe(false);
+    expect(lineDone([false, false], [0, 1], [])).toBe(true);
   });
 });
 
@@ -97,32 +92,16 @@ describe('strokes', () => {
     expect(strokeCells(5, 8, 6).cells).toEqual([8, 7, 6]);
   });
 
-  it('rub out when they start on the same mark', () => {
-    expect(strokeMark(COLOUR, COLOUR)).toBe(EMPTY);
-    expect(strokeMark(DOT, COLOUR)).toBe(COLOUR);
-    expect(strokeMark(EMPTY, DOT)).toBe(DOT);
-  });
-
-  it('fill empty squares and leave other marks', () => {
-    const marks: Mark[] = [DOT, EMPTY, DOT, COLOUR];
-    expect(paint(marks, [0, 1, 2, 3], COLOUR, COLOUR)).toEqual([
-      COLOUR,
-      COLOUR,
-      DOT,
-      COLOUR,
-    ]);
-    expect(paint(marks, [0, 1, 2, 3], EMPTY, DOT)).toEqual([
-      EMPTY,
-      EMPTY,
-      EMPTY,
-      COLOUR,
-    ]);
+  it('colour or clear every square they go over', () => {
+    const coloured = [false, true, false];
+    expect(paint(coloured, [0, 1, 2], true)).toEqual([true, true, true]);
+    expect(paint(coloured, [1, 2], false)).toEqual([false, false, false]);
   });
 
   it('solve the picture when the coloured squares match', () => {
     const p = picture(['#.', '##']);
-    expect(isSolved(p, [COLOUR, DOT, COLOUR, COLOUR])).toBe(true);
-    expect(isSolved(p, [COLOUR, COLOUR, COLOUR, COLOUR])).toBe(false);
+    expect(isSolved(p, [true, false, true, true])).toBe(true);
+    expect(isSolved(p, [true, true, true, true])).toBe(false);
   });
 });
 
@@ -146,15 +125,15 @@ describe('a game', () => {
 
   it('is solved by the stroke that finishes the picture', () => {
     let game = newGame('tiny', p);
-    game = withStroke(game, p, [0], COLOUR);
+    game = withStroke(game, p, [0], true);
     expect(game.solved).toBe(false);
-    game = withStroke(game, p, [2, 3], COLOUR);
+    game = withStroke(game, p, [2, 3], true);
     expect(game.solved).toBe(true);
   });
 
   it('stays the same after a stroke that changes nothing', () => {
     const game = newGame('tiny', p);
-    expect(withStroke(game, p, [0], EMPTY)).toBe(game);
+    expect(withStroke(game, p, [0], false)).toBe(game);
   });
 
   it('counts each picture once', () => {

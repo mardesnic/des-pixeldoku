@@ -12,8 +12,13 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 
 ## Features
 
-- Small grids to start with, bigger ones when you are ready
-- Every picture has exactly one answer
+- Four sizes, from 5 × 5 to 10 × 10, each with its own hand-drawn pictures
+- Tap a square to colour it, or drag along a row or column
+- A row's or column's numbers turn green when its squares match them
+- The picture shows in its colours once it's solved, and tells you what it is
+- Every picture has exactly one answer, found without guessing
+- Next picture picks one you haven't solved yet
+- How to play, with examples, shown the first time
 - Undo and Start over
 - Picks up where you left off after a reload
 - Keeps the screen on while you play
@@ -31,3 +36,5 @@ npm run build      # production build in dist/
 ```
 
 `npm run deploy` builds the app and publishes it to GitHub Pages.
+
+The pictures are drawn as text in `src/lib/pictures.ts`, one letter a square for its colour. The tests check that each one can be solved one line at a time.

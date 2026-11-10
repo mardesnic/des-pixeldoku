@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Board } from './components/Board';
 import { Confetti } from './components/Confetti';
+import { Help } from './components/Help';
 import { Icon } from './components/Icon';
 import { NewGame, SettingsView } from './components/Menu';
 import {
@@ -16,44 +17,39 @@ import {
   type Stats,
 } from './lib/game';
 import { STRINGS, detectLang } from './lib/i18n';
-import {
-  COLOUR,
-  DOT,
-  pickPicture,
-  pictureById,
-  type Mark,
-  type Tool,
-} from './lib/pixels';
+import { pickPicture, pictureById } from './lib/pixels';
 import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
 import { useCheer } from './lib/use-cheer';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
-type View = 'play' | 'new' | 'settings';
+type View = 'play' | 'new' | 'settings' | 'help';
 
 export default function App() {
   // Keys are prefixed: other apps on the same GitHub Pages origin share
   // this storage.
   const [store, setStore] = useStoredState<{ game?: Game }>('pixels', {});
-  // A saved game whose picture has since been taken out is dropped.
+  // A saved game whose picture has since been taken out, or saved by an
+  // older version, is dropped.
   const picture =
-    store.game && pictureById(store.game.difficulty, store.game.picture);
+    Array.isArray(store.game?.coloured) &&
+    pictureById(store.game.difficulty, store.game.picture);
   const game = picture ? store.game : undefined;
   const [settings, setSettings] = useStoredState<Settings>(
     'pixels-settings',
     initialSettings
   );
   const [stats, setStats] = useStoredState<Stats>('pixels-stats', initialStats);
-  const [view, setViewState] = useState<View>(game ? 'play' : 'new');
+  const [view, setViewState] = useState<View>(
+    game ? 'play' : settings.helpSeen ? 'new' : 'help'
+  );
   // Menus open over the game, so the phone's Back button closes them.
   const setView = (next: View) => {
     if (next === 'play') popMenu();
     else pushMenu();
     setViewState(next);
   };
-  useBackButton(() => {
-    if (game) setViewState('play');
-  });
+  useBackButton(() => setViewState(game ? 'play' : 'new'));
   const [history, setHistory] = useState<Game[]>([]);
   const [celebrating, setCelebrating] = useState(false);
   useWakeLock();
@@ -80,9 +76,9 @@ export default function App() {
     setStore({ game: next });
   };
 
-  const onStroke = (cells: number[], mark: Mark) => {
+  const onStroke = (cells: number[], on: boolean) => {
     if (!game || !picture) return;
-    const next = withStroke(game, picture, cells, mark);
+    const next = withStroke(game, picture, cells, on);
     if (next.solved) {
       setStats(recordWin(stats, next));
       setCelebrating(true);
@@ -91,23 +87,18 @@ export default function App() {
     play(next);
   };
 
-  const setTool = (tool: Tool) => {
-    if (game) setStore({ game: { ...game, tool } });
-  };
-
   const undo = () => {
     if (!game || game.solved || !history.length) return;
-    // Undo takes back marks, not a change of tool.
-    setStore({ game: { ...history.at(-1)!, tool: game.tool } });
+    setStore({ game: history.at(-1)! });
     setHistory((h) => h.slice(0, -1));
   };
 
   const clear = () => {
     if (!game || !picture || game.solved) return;
-    play({ ...newGame(game.difficulty, picture), tool: game.tool });
+    play(newGame(game.difficulty, picture));
   };
 
-  const blank = !game?.marks.some(Boolean);
+  const blank = !game?.coloured.some(Boolean);
 
   return (
     <main className={view === 'play' && game ? 'app app--play' : 'app'}>
@@ -142,12 +133,24 @@ export default function App() {
         </div>
       </header>
 
-      {view === 'new' && <NewGame onStart={start} t={t} />}
+      {view === 'help' && (
+        <Help
+          onDone={() => {
+            setSettings({ ...settings, helpSeen: true });
+            setView(game ? 'play' : 'new');
+          }}
+          t={t}
+        />
+      )}
+      {view === 'new' && (
+        <NewGame onStart={start} onHelp={() => setView('help')} t={t} />
+      )}
       {view === 'settings' && (
         <SettingsView
           settings={settings}
           setSettings={setSettings}
           stats={stats}
+          onHelp={() => setView('help')}
           t={t}
         />
       )}
@@ -159,8 +162,7 @@ export default function App() {
               // A new picture starts with no stroke under way.
               key={picture.id}
               picture={picture}
-              marks={game.marks}
-              tool={game.tool}
+              coloured={game.coloured}
               solved={game.solved}
               onStroke={onStroke}
               t={t}
@@ -188,24 +190,7 @@ export default function App() {
             </section>
           ) : (
             <div className='bar'>
-              <div className='switch'>
-                {([COLOUR, DOT] as const).map((tool) => (
-                  <button
-                    key={tool}
-                    aria-pressed={game.tool === tool}
-                    onClick={() => setTool(tool)}
-                  >
-                    <span
-                      className={
-                        tool === COLOUR
-                          ? 'switch__mark switch__mark--colour'
-                          : 'switch__mark switch__mark--dot'
-                      }
-                    />
-                    {tool === COLOUR ? t.colour : t.dot}
-                  </button>
-                ))}
-              </div>
+              <p className='goal'>{t.hint}</p>
               <div className='tools'>
                 <button
                   className='tool'

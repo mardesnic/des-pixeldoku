@@ -27,11 +27,18 @@ const en = {
     medium: 'Medium',
     big: 'Big',
   } satisfies Record<Difficulty, string>,
-  goal: 'The numbers say how many squares to colour in each row and column. Colour them all and find the picture!',
-  colour: 'Colour',
-  dot: 'Dot',
+  hint: 'Tap or drag to colour',
+  howToPlay: 'How to play',
+  helpCount:
+    'Each number says how many squares to colour in its row or column. A 3 means three squares side by side.',
+  helpGroups:
+    'Two numbers mean two groups, in that order, with at least one empty square between them.',
+  helpGreen:
+    'When the coloured squares in a line match its numbers, the numbers turn green.',
+  helpTap:
+    'Tap a square to colour it, or drag along a row or column. Tap a coloured square to clear it. Colour all the right squares and the picture appears!',
+  letsPlay: "Let's play",
   coloured: 'coloured',
-  dotted: 'dot',
   blank: 'empty',
   undo: 'Undo',
   clear: 'Start over',
@@ -64,11 +71,18 @@ const hr: Strings = {
     medium: 'Srednja',
     big: 'Velika',
   },
-  goal: 'Brojevi govore koliko kvadratića treba obojiti u svakom retku i stupcu. Oboji ih sve i otkrij sliku!',
-  colour: 'Boja',
-  dot: 'Točka',
+  hint: 'Dodirni ili povuci za bojanje',
+  howToPlay: 'Kako se igra',
+  helpCount:
+    'Svaki broj kaže koliko kvadratića treba obojiti u njegovom retku ili stupcu. 3 znači tri kvadratića jedan do drugoga.',
+  helpGroups:
+    'Dva broja znače dvije skupine, tim redom, s barem jednim praznim kvadratićem između.',
+  helpGreen:
+    'Kad obojeni kvadratići u retku ili stupcu odgovaraju brojevima, brojevi postanu zeleni.',
+  helpTap:
+    'Dodirni kvadratić da ga obojiš ili povuci prstom po retku ili stupcu. Dodirni obojeni kvadratić da ga obrišeš. Oboji sve prave kvadratiće i pojavit će se slika!',
+  letsPlay: 'Igrajmo',
   coloured: 'obojeno',
-  dotted: 'točka',
   blank: 'prazno',
   undo: 'Poništi',
   clear: 'Ispočetka',
