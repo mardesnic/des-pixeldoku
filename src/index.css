@@ -11,6 +11,7 @@
   --clue: #e9ecf1;
   --done: #2f9e44;
   --on-done: #ffffff;
+  --wrong: #e8590c;
   --paper: #eef1f5;
   --radius: 18px;
 
@@ -40,6 +41,7 @@
     --clue: #20242b;
     --done: #69db7c;
     --on-done: #0b2410;
+    --wrong: #ff922b;
   }
 }
 
@@ -245,6 +247,17 @@ h2 {
 .group--none {
   background: none;
   color: var(--muted);
+}
+
+/* A line whose coloured squares can't match its numbers however it goes
+   on: its numbers turn orange until it is fixed. */
+.clue--wrong {
+  background: color-mix(in srgb, var(--wrong) 18%, transparent);
+}
+
+.clue--wrong .group {
+  background: var(--wrong);
+  color: var(--on-done);
 }
 
 /* A line whose coloured squares match all its numbers. */

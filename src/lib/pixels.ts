@@ -55,6 +55,15 @@ export const lineDone = (
   clue: number[]
 ) => same(clueOf(cells.map((i) => coloured[i])), clue);
 
+// Whether a line's coloured squares can still be made to match its numbers.
+// Not when there are too many, when a group is too long, or when squares
+// are apart that a number needs together: "2" with ■·■ can never fit.
+export const lineFits = (line: boolean[], clue: number[]) =>
+  solveLine(
+    line.map((on) => (on ? 1 : -1)),
+    clue
+  ) !== null;
+
 // Which of a line's numbers have found their group: a run of coloured
 // squares just as long, that can only be that number's group however the
 // rest of the line turns out. Colouring the bottom square of a "2 1" column

@@ -7,6 +7,7 @@ import {
   colourAt,
   columnOf,
   groupsDone,
+  lineFits,
   lineDone,
   paint,
   rowOf,
@@ -25,8 +26,11 @@ function Clue({ line, clue }: { line: boolean[]; clue: number[] }) {
     line.map((_, i) => i),
     clue
   );
+  const wrong = !lineFits(line, clue);
   return (
-    <div className={all ? 'clue clue--done' : 'clue'}>
+    <div
+      className={all ? 'clue clue--done' : wrong ? 'clue clue--wrong' : 'clue'}
+    >
       {clue.length ? (
         clue.map((k, i) => (
           <span

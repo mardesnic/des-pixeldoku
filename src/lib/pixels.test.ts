@@ -6,6 +6,7 @@ import {
   clueOf,
   cluesOf,
   groupsDone,
+  lineFits,
   isSolved,
   lineDone,
   paint,
@@ -40,6 +41,25 @@ describe('clues', () => {
     expect(lineDone(coloured, [0, 1, 2], [1, 1])).toBe(true);
     expect(lineDone(coloured, [0, 1, 2], [2])).toBe(false);
     expect(lineDone([false, false], [0, 1], [])).toBe(true);
+  });
+});
+
+describe('a line that cannot fit', () => {
+  const line = (s: string) => [...s].map((c) => c === '#');
+
+  it('is one with squares apart that a number needs together', () => {
+    expect(lineFits(line('#.#..'), [2])).toBe(false);
+    expect(lineFits(line('##...'), [2])).toBe(true);
+  });
+
+  it('is one with too much coloured, or a group too long', () => {
+    expect(lineFits(line('###..'), [2])).toBe(false);
+    expect(lineFits(line('##.#.'), [1, 1])).toBe(false);
+  });
+
+  it('is not one that can still grow into its numbers', () => {
+    expect(lineFits(line('..#..'), [2, 1])).toBe(true);
+    expect(lineFits(line('.....'), [3])).toBe(true);
   });
 });
 

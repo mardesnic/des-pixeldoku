@@ -15,6 +15,7 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 - Four sizes, from 5 × 5 to 10 × 10, each with its own hand-drawn pictures
 - Tap a square to colour it, or drag along a row or column
 - Each number is a little block, and turns green as soon as its group of squares is in place
+- A row's or column's numbers turn orange when its squares can't match them, such as two squares apart for a 2
 - The picture shows in its colours once it's solved, and tells you what it is
 - Every picture has exactly one answer, found without guessing
 - Next picture picks one you haven't solved yet
