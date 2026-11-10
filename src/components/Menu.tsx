@@ -4,6 +4,7 @@ import {
   type Settings,
   type Stats,
 } from '../lib/game';
+import { PICTURES } from '../lib/pictures';
 import { LANG_NAMES, LANGS, type Language, type Strings } from '../lib/i18n';
 
 export function NewGame({
@@ -16,6 +17,7 @@ export function NewGame({
   return (
     <section className='card'>
       <h2>{t.newGame}</h2>
+      <p className='muted'>{t.goal}</p>
       <div className='levels'>
         {DIFFICULTIES.map((d, n) => (
           <button key={d} className='level' onClick={() => onStart(d)}>
@@ -110,7 +112,7 @@ export function SettingsView({
             {DIFFICULTIES.map((d) => (
               <tr key={d}>
                 <th>{t.levels[d]}</th>
-                <td>{stats[d].solved}</td>
+                <td>{t.solvedOf(stats[d].length, PICTURES[d].length)}</td>
               </tr>
             ))}
           </tbody>
