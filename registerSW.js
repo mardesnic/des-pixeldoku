@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/des-pixels/sw.js', { scope: '/des-pixels/' })})}
