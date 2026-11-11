@@ -200,7 +200,7 @@ export default function App() {
 
       {view === 'settings' && (
         <footer className='footer'>
-          <a href='https://github.com/mardesnic/des-pixels'>{t.source}</a>
+          <a href='https://github.com/mardesnic/des-pixeldoku'>{t.source}</a>
         </footer>
       )}
       {celebrating && <Confetti onDone={() => setCelebrating(false)} />}

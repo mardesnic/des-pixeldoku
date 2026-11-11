@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/des-pixels/',
+  base: '/des-pixeldoku/',
   plugins: [
     react(),
     // Installable from the browser menu, and works offline once loaded.
@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         // A fixed id of its own, so a phone never mixes it up with an earlier
         // install or with the other games on this site.
-        id: 'des-pixels',
+        id: 'des-pixeldoku',
         name: 'Pixeldoku',
         short_name: 'Pixeldoku',
         description: 'A picture logic puzzle for kids that works offline',
