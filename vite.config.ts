@@ -15,8 +15,8 @@ export default defineConfig({
         // A fixed id of its own, so a phone never mixes it up with an earlier
         // install or with the other games on this site.
         id: 'des-pixels',
-        name: 'Pixels',
-        short_name: 'Pixels',
+        name: 'Pixeldoku',
+        short_name: 'Pixeldoku',
         description: 'A picture logic puzzle for kids that works offline',
         theme_color: '#c2255c',
         background_color: '#f4f5f7',

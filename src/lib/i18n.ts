@@ -16,7 +16,7 @@ export function detectLang(): Lang {
 }
 
 const en = {
-  title: 'Pixels',
+  title: 'Pixeldoku',
   newGame: 'New game',
   settings: 'Settings',
   done: 'Done',
@@ -49,7 +49,7 @@ const en = {
 export type Strings = typeof en;
 
 const hr: Strings = {
-  title: 'Pikseli',
+  title: 'Pikseldoku',
   newGame: 'Nova igra',
   settings: 'Postavke',
   done: 'Gotovo',

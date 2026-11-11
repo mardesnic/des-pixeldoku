@@ -1,4 +1,4 @@
-# Pixels
+# Pixeldoku
 
 A free picture logic puzzle for young kids that works offline. The numbers next to each row and above each column say how many squares to colour there, and in which groups. Colour the right squares and a little picture appears.
 
