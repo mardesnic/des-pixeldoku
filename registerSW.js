@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/des-pixels/sw.js', { scope: '/des-pixels/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/des-pixeldoku/sw.js', { scope: '/des-pixeldoku/' })})}
