@@ -19,8 +19,7 @@ const en = {
   title: 'Pixeldoku',
   newGame: 'New game',
   settings: 'Settings',
-  done: 'Done',
-  cancel: 'Cancel',
+  close: 'Close',
   levels: {
     tiny: 'Very easy',
     small: 'Easy',
@@ -60,8 +59,7 @@ const hr: Strings = {
   title: 'Pikseldoku',
   newGame: 'Nova igra',
   settings: 'Postavke',
-  done: 'Gotovo',
-  cancel: 'Odustani',
+  close: 'Zatvori',
   levels: {
     tiny: 'Vrlo lagano',
     small: 'Lagano',
