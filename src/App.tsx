@@ -19,6 +19,7 @@ import { STRINGS, detectLang } from './lib/i18n';
 import { pickPicture, pictureById } from './lib/pixels';
 import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
 import { useCheer } from './lib/use-cheer';
+import { useSettings } from './lib/use-settings';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
@@ -34,7 +35,7 @@ export default function App() {
     Array.isArray(store.game?.coloured) &&
     pictureById(store.game.difficulty, store.game.picture);
   const game = picture ? store.game : undefined;
-  const [settings, setSettings] = useStoredState<Settings>(
+  const [settings, setSettings] = useSettings<Settings>(
     'pixels-settings',
     initialSettings
   );
