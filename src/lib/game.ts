@@ -1,4 +1,3 @@
-import type { Language } from './i18n';
 import type { Picture } from './pictures';
 import { isSolved, paint } from './pixels';
 
@@ -7,12 +6,10 @@ export const DIFFICULTIES = ['tiny', 'small', 'medium', 'big'] as const;
 export type Difficulty = (typeof DIFFICULTIES)[number];
 
 export type Settings = {
-  language: Language;
   sound: boolean;
 };
 
 export const initialSettings: Settings = {
-  language: 'auto',
   sound: true,
 };
 
