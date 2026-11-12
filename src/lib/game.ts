@@ -5,14 +5,6 @@ import { isSolved, paint } from './pixels';
 export const DIFFICULTIES = ['tiny', 'small', 'medium', 'big'] as const;
 export type Difficulty = (typeof DIFFICULTIES)[number];
 
-export type Settings = {
-  sound: boolean;
-};
-
-export const initialSettings: Settings = {
-  sound: true,
-};
-
 export type Game = {
   difficulty: Difficulty;
   picture: string;
