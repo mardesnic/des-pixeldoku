@@ -18,7 +18,7 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 - A row's or column's numbers turn orange when its squares can't match them, such as two squares apart for a 2
 - The picture shows in its colours once it's solved, and tells you what it is
 - Every picture has exactly one answer, found without guessing
-- Next picture picks one you haven't solved yet
+- Next picks one you haven't solved yet
 - Undo and Start over
 - Picks up where you left off after a reload
 - Keeps the screen on while you play
